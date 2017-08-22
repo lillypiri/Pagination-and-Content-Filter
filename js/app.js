@@ -8,14 +8,14 @@ $searchBox.on('click', 'button', function() {
     searchList();
 });
 
-// sticky plugin used for header (not part of functionality or grading content)
+// Sticky plugin used for header (not part of functionality or grading content)
 $('.page-header').sticky({
     topSpacing: 0,
     getWidthFrom: '.sticky-wrapper',
     responsiveWidth: true
 });
 
-//When the page loads, your program should hide all but the first 10 students in the list.
+// When the page loads, your program should hide all but the first 10 students in the list.
 function showPage(pageNum, $matchingStudents) {
     $students.hide();
     // accounts for 0 indexing
