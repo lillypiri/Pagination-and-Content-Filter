@@ -8,14 +8,14 @@ $searchBox.on('click', 'button', function() {
     searchList();
 });
 
-// Sticky plugin used for header (not part of functionality or grading content)
+// sticky plugin used for header (not part of functionality or grading content)
 $('.page-header').sticky({
     topSpacing: 0,
     getWidthFrom: '.sticky-wrapper',
     responsiveWidth: true
 });
 
-// When the page loads, your program should hide all but the first 10 students in the list.
+//When the page loads, your program should hide all but the first 10 students in the list.
 function showPage(pageNum, $matchingStudents) {
     $students.hide();
     // accounts for 0 indexing
@@ -30,18 +30,17 @@ function showPage(pageNum, $matchingStudents) {
         $($matchingStudents[i]).show();
     }
 
-    appendPageLinks(pageNum);
+    appendPageLinks(pageNum, $matchingStudents);
 }
 showPage(1);
 
 /* This function creates the links to the different "pages" or lists of students.
 It will call the showPage function to display the proper list of students based on which link the user clicks.
 For example, clicking the link to page 1, tells the showPage function to display the first 10 students. */
-function appendPageLinks(activePage) {
+function appendPageLinks(activePage, $matchingStudents) {
     //calculates how many pages are needed
-    var totalPages = Math.ceil(
-        $('.student-item:visible').length / studentsPerPage
-    );
+    var totalPages = Math.ceil($matchingStudents.length / studentsPerPage);
+
     var pageLinks = '';
 
     for (var i = 1; i <= totalPages; i++) {
