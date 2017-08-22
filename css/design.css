@@ -13,7 +13,12 @@ body{
 }
 
 .page-header{
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  background-color: white;
+  transition: 1s;
+  padding: 20px;
+  width: inherit;
+  border-radius: 2px;
 }
   .page-header h2{
     float: left;
@@ -99,7 +104,7 @@ body{
   margin: 40px 0 0 0;
   text-align: center;
 }
- 
+
   .pagination li{
     display: inline;
   }
@@ -117,3 +122,15 @@ body{
       background-color: #4ba6c3;
       color: #fff;
     }
+
+
+.is-sticky .page-header {
+  background-color: white;
+  margin-bottom: 30px;
+  color: #555;
+  border-bottom: 1px solid #999;
+}
+
+.is-sticky h2 {
+  color: #555;
+}
