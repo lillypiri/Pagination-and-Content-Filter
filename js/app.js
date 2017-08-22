@@ -84,13 +84,6 @@ function searchList() {
     showPage(1, $matchingStudents);
 }
 
-/*in the for loop check if the current student has an email in that list and only show it if it does*/
-
-/*
-the for loop needs to be the one in the show page thing
-you just pass in your list of emails to showPage
-and it will do the actual filtering
-*/
 /* Resources used:
 https://learn.jquery.com/events/event-delegation/
 */
