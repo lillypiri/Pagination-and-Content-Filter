@@ -1,91 +1,79 @@
-//When the page loads, your program should hide all but the first 10 students in the list.
-var studentsPerPage = 10;
-var $students = $('.student-item');
-var totalPages = Math.ceil($students.length / studentsPerPage);
-var $searchBox = $('.student-search');
-$searchBox.html('<input placeholder="Start typing.." /> <button>🔎</button>');
-$searchBox.on('click', 'button', function() {
-    searchList();
-});
+$(document).ready(function() {
+    var studentsPerPage = 10;
+    var $students = $('.student-item');
 
-// sticky plugin used for header (not part of functionality or grading content)
-$('.page-header').sticky({
-    topSpacing: 0,
-    getWidthFrom: '.sticky-wrapper',
-    responsiveWidth: true
-});
-
-//When the page loads, your program should hide all but the first 10 students in the list.
-function showPage(pageNum, $matchingStudents) {
-    $students.hide();
-    // accounts for 0 indexing
-    var offset = (pageNum - 1) * studentsPerPage;
-
-    // If we weren't given a list of students then assume we need all students
-    if (!$matchingStudents) {
-        $matchingStudents = $students;
-    }
-
-    for (var i = offset; i < offset + studentsPerPage; i++) {
-        $($matchingStudents[i]).show();
-    }
-
-    appendPageLinks(pageNum, $matchingStudents);
-}
-showPage(1);
-
-/* This function creates the links to the different "pages" or lists of students.
-It will call the showPage function to display the proper list of students based on which link the user clicks.
-For example, clicking the link to page 1, tells the showPage function to display the first 10 students. */
-function appendPageLinks(activePage, $matchingStudents) {
-    //calculates how many pages are needed
-    var totalPages = Math.ceil($matchingStudents.length / studentsPerPage);
-
-    var pageLinks = '';
-    // calculates page number and adds active class to active page number
-    for (var i = 1; i <= totalPages; i++) {
-        pageLinks +=
-            '<li><a class="' +
-            (activePage === i ? 'active' : '') +
-            '" data-page="' +
-            i +
-            '">' +
-            i +
-            '</a>';
-    }
-    // add page nrs to html
-    $('.pagination').html('<ul>' + pageLinks + '</ul>');
-    // console.log(pageLinks);
-
-    $('.pagination').on('click', 'a', function(event) {
-        // console.log("blah clicked", $(event.target).data("page"));
-        var $link = $(event.target);
-        var pageNum = $link.data('page');
-        showPage(pageNum, $matchingStudents);
-        window.scrollTo(0, 0);
-        event.preventDefault();
+    // Add a search box
+    var $searchBox = $('.student-search');
+    $searchBox.html(
+        '<input placeholder="Start typing.." /> <button>🔎</button>'
+    );
+    $searchBox.on('click', 'button', function() {
+        searchList();
     });
-}
-
-/* EXCEEDS function: The function takes a value from the input field, and compares it to each student in the list.
-If that value is found inside the name or email of a student, that student is added to a new "matched" list.
-If the "matched" list is empty, then display a message that no matching students were found. Otherwise,
-call the appendPageLinks function to create new pagination for the search results.
-Then call the showPage function to display the first page of matched results.
-*/
-// convert search input to lowercase so that search isn't case sensitive
-
-function searchList() {
-    var search = $('input', $searchBox).val().toLowerCase();
-
-    var $matchingStudents = $students.filter(function() {
-        return $('.email', this).text().indexOf(search) >= 0;
+    $searchBox.on('keyup', 'input', function() {
+        searchList();
     });
 
-    // We now have a filtered list of students
-    showPage(1, $matchingStudents);
-}
+    function showPage(pageNum, $matchingStudents) {
+        $students.hide();
 
-/* Resources used:
-https://learn.jquery.com/events/event-delegation/
-*/
+        // accounts for 0 indexing
+        var offset = (pageNum - 1) * studentsPerPage;
+
+        // If we weren't given a list of students then assume we need all students
+        $matchingStudents = $matchingStudents || $students;
+        $matchingStudents.slice(offset, offset + studentsPerPage).show();
+
+        appendPageLinks(pageNum, $matchingStudents);
+    }
+
+    // appends the pagination links/buttons
+    function appendPageLinks(activePage, $matchingStudents) {
+        var totalPages = Math.ceil($matchingStudents.length / studentsPerPage);
+
+        var pageLinks = '';
+        for (var i = 1; i <= totalPages; i++) {
+            pageLinks +=
+                '<li><a class="' +
+                (activePage === i ? 'active' : '') +
+                '" data-page="' +
+                i +
+                '">' +
+                i +
+                '</a>';
+        }
+        $('.pagination').html('<ul>' + pageLinks + '</ul>');
+        $('.pagination').on('click', 'a', function(event) {
+            event.preventDefault();
+
+            showPage($(event.target).data('page'), $matchingStudents);
+
+            // Scroll to the top
+            window.scrollTo(0, 0);
+        });
+    }
+
+    // search function. returns alert if no matching students.
+    function searchList() {
+        var search = $('input', $searchBox).val().toLowerCase();
+        var $matchingStudents = $students.filter(function() {
+            return $('.email', this).text().indexOf(search) >= 0;
+        });
+        if ($matchingStudents.length === 0) {
+           $('.no-students').text("No students match that query. Try again.");
+         } else {
+           $('.no-students').text("");
+         }
+        // We now have a filtered list of students
+        showPage(1, $matchingStudents);
+    }
+
+    showPage(1);
+
+    // sticky plugin used for header (not part of functionality or grading content)
+    $('.page-header').sticky({
+        topSpacing: 0,
+        getWidthFrom: '.sticky-wrapper',
+        responsiveWidth: true
+    });
+});
