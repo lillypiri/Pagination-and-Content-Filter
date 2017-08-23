@@ -1,16 +1,16 @@
 $(document).ready(function() {
     var studentsPerPage = 10;
-    var $students = $('.student-item');
+    var $students = $(".student-item");
 
     // Add a search box
-    var $searchBox = $('.student-search');
+    var $searchBox = $(".student-search");
     $searchBox.html(
         '<input placeholder="Start typing.." /> <button>🔎</button>'
     );
-    $searchBox.on('click', 'button', function() {
+    $searchBox.on("click", "button", function() {
         searchList();
     });
-    $searchBox.on('keyup', 'input', function() {
+    $searchBox.on("keyup", "input", function() {
         searchList();
     });
 
@@ -30,23 +30,26 @@ $(document).ready(function() {
     // appends the pagination links/buttons
     function appendPageLinks(activePage, $matchingStudents) {
         var totalPages = Math.ceil($matchingStudents.length / studentsPerPage);
-
-        var pageLinks = '';
+        if (totalPages === 1) {
+            $(".pagination").html("");
+            return;
+        }
+        var pageLinks = "";
         for (var i = 1; i <= totalPages; i++) {
             pageLinks +=
                 '<li><a class="' +
-                (activePage === i ? 'active' : '') +
+                (activePage === i ? "active" : "") +
                 '" data-page="' +
                 i +
                 '">' +
                 i +
-                '</a>';
+                "</a>";
         }
-        $('.pagination').html('<ul>' + pageLinks + '</ul>');
-        $('.pagination').on('click', 'a', function(event) {
+        $(".pagination").html("<ul>" + pageLinks + "</ul>");
+        $(".pagination").on("click", "a", function(event) {
             event.preventDefault();
 
-            showPage($(event.target).data('page'), $matchingStudents);
+            showPage($(event.target).data("page"), $matchingStudents);
 
             // Scroll to the top
             window.scrollTo(0, 0);
@@ -55,15 +58,15 @@ $(document).ready(function() {
 
     // search function. returns alert if no matching students.
     function searchList() {
-        var search = $('input', $searchBox).val().toLowerCase();
+        var search = $("input", $searchBox).val().toLowerCase();
         var $matchingStudents = $students.filter(function() {
-            return $('.email', this).text().indexOf(search) >= 0;
+            return $(".email", this).text().indexOf(search) >= 0;
         });
         if ($matchingStudents.length === 0) {
-           $('.no-students').text("No students match that query. Try again.");
-         } else {
-           $('.no-students').text("");
-         }
+            $(".no-students").text("No students match that query. Try again.");
+        } else {
+            $(".no-students").text("");
+        }
         // We now have a filtered list of students
         showPage(1, $matchingStudents);
     }
@@ -71,9 +74,9 @@ $(document).ready(function() {
     showPage(1);
 
     // sticky plugin used for header (not part of functionality or grading content)
-    $('.page-header').sticky({
+    $(".page-header").sticky({
         topSpacing: 0,
-        getWidthFrom: '.sticky-wrapper',
+        getWidthFrom: ".sticky-wrapper",
         responsiveWidth: true
     });
 });
