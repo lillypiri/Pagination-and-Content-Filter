@@ -42,7 +42,7 @@ function appendPageLinks(activePage, $matchingStudents) {
     var totalPages = Math.ceil($matchingStudents.length / studentsPerPage);
 
     var pageLinks = '';
-
+    // calculates page number and adds active class to active page number
     for (var i = 1; i <= totalPages; i++) {
         pageLinks +=
             '<li><a class="' +
@@ -53,6 +53,7 @@ function appendPageLinks(activePage, $matchingStudents) {
             i +
             '</a>';
     }
+    // add page nrs to html
     $('.pagination').html('<ul>' + pageLinks + '</ul>');
     // console.log(pageLinks);
 
@@ -60,7 +61,7 @@ function appendPageLinks(activePage, $matchingStudents) {
         // console.log("blah clicked", $(event.target).data("page"));
         var $link = $(event.target);
         var pageNum = $link.data('page');
-        showPage(pageNum);
+        showPage(pageNum, $matchingStudents);
         window.scrollTo(0, 0);
         event.preventDefault();
     });
@@ -72,6 +73,7 @@ If the "matched" list is empty, then display a message that no matching students
 call the appendPageLinks function to create new pagination for the search results.
 Then call the showPage function to display the first page of matched results.
 */
+// convert search input to lowercase so that search isn't case sensitive
 
 function searchList() {
     var search = $('input', $searchBox).val().toLowerCase();
